@@ -1,4 +1,5 @@
-ig-twitter-cards
-================
+iG:Twitter Cards
+====================
 
-A plugin to enable Twitter Cards on a WordPress site
+A plugin which enables Twitter Cards on a WordPress site for pretty sharing on Twitter.
+
