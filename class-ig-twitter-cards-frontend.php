@@ -201,7 +201,7 @@ class iG_Twitter_Cards_Frontend extends iG_Twitter_Cards {
 
 		$author_twitter = '';
 
-		$post_meta = get_post_meta( $post->ID, 'ig_tc_mb', true );
+		$post_meta = get_post_meta( $post->ID, '_ig_tc_mb', true );
 
 		if( ! empty( $post_meta ) && is_array( $post_meta ) ) {
 			$author_twitter = ( isset( $post_meta['author_twitter'] ) && ! empty( $post_meta['author_twitter'] ) ) ? $post_meta['author_twitter'] : '';

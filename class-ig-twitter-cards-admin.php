@@ -66,7 +66,7 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 	public function add_meta_box_ui( $post ) {
 		//add nonce field
 		wp_nonce_field( parent::plugin_id . '-mb-nonce', 'ig_tc_nonce' );
-		$mb_options = get_post_meta( $post->ID, 'ig_tc_mb', true );
+		$mb_options = get_post_meta( $post->ID, '_ig_tc_mb', true );
 		if( empty( $mb_options ) || ! is_array( $mb_options ) ) {
 			$mb_options = array();
 
@@ -157,7 +157,7 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 			$data['player_image'] = esc_url_raw( $_POST['ig_tc_player_image'] );
 		}
 
-		update_post_meta( $post_id, 'ig_tc_mb', $data );
+		update_post_meta( $post_id, '_ig_tc_mb', $data );
 	}
 
 	/**
