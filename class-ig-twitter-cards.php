@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Base class for iG Twitter Cards plugin
+ * Base class for iG:Twitter Cards plugin
  *
  * @author Amit Gupta
  */

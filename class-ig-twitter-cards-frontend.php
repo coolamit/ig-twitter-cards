@@ -1,7 +1,7 @@
 <?php
 
 /**
- * class that handles all the front-end for iG Twitter Cards plugin
+ * class that handles all the front-end for iG:Twitter Cards plugin
  *
  * @author Amit Gupta
  */

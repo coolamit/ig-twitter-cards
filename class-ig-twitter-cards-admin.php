@@ -1,7 +1,7 @@
 <?php
 
 /**
- * class that handles admin UI for iG Twitter Cards plugin
+ * class that handles admin UI for iG:Twitter Cards plugin
  *
  * @author Amit Gupta
  */
@@ -54,7 +54,7 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 		foreach( $this->_post_types as $post_type ) {
 			add_meta_box(
 				parent::plugin_id . '-mb',
-				'iG Twitter Cards',
+				'iG:Twitter Cards',
 				array( $this, 'add_meta_box_ui' ),
 				$post_type,
 				'normal',
