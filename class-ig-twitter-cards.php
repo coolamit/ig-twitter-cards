@@ -84,7 +84,7 @@ abstract class iG_Twitter_Cards {
 	protected function _init_core() {
 		$this->_init_options();		//init options
 
-		//let allowed post types to be overridden
+		//allow post types to be overridden
 		$this->_post_types = apply_filters( 'ig_twitter_cards_post_types', $this->_post_types );
 	}
 

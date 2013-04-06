@@ -94,7 +94,7 @@ class iG_Twitter_Cards_Frontend extends iG_Twitter_Cards {
 		$this->_add_site_twitter();
 		$this->_add_author_twitter();
 
-		$this->_tags = apply_filters( 'ig_twitter_cards_tags', $this->_tags );	//allow override of tags one last time
+		$this->_tags = apply_filters( 'ig_twitter_cards_tags', $this->_tags );	//allow override on tags
 
 		$this->_tags = array_map( 'esc_attr', array_filter( $this->_tags ) );	//weed out empty tags and apply esc_attr() on remaining tags
 	}

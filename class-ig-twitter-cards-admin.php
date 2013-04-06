@@ -17,6 +17,8 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 		'player_image' => '',
 	);
 
+	protected $_admin_notices = array();
+
 	/**
 	 * Singleton implemented, protected constructor so its accessible by parent class
 	 */
@@ -43,9 +45,69 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 			add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 			//save metabox data on post pages in admin
 			add_action( 'save_post', array( $this, 'save_meta_box' ) );
+
+			//setup display of error messages if any
+			add_action( 'admin_notices', array( $this, 'show_admin_notices' ) );
+			//clear out error messages which have been displayed already
+			add_action( 'admin_footer', array( $this, 'clear_admin_notices' ) );
+			//save error messages for current page
+			add_action( 'shutdown', array( $this, 'save_admin_notices' ) );
 		}
 	}
 
+	/**
+	 * This function is called on shutdown and it saves $this->_admin_notices in
+	 * post_meta if its not empty and if current screen is post/page add/edit screen
+	 */
+	public function save_admin_notices() {
+		global $post;
+
+		if( empty( $this->_admin_notices ) || empty( $post ) || ! is_object( $post ) || ! isset( $post->ID ) || intval( $post->ID ) < 1 ) {
+			return;
+		}
+
+		update_post_meta( $post->ID, '_ig_tc_notices', $this->_admin_notices );
+	}
+
+	/**
+	 * This function is called on admin_footer and it clears out notices saved in
+	 * post_meta if current screen is post/page add/edit screen
+	 */
+	public function clear_admin_notices() {
+		global $post;
+
+		if( empty( $post ) || ! is_object( $post ) || ! isset( $post->ID ) || intval( $post->ID ) < 1 ) {
+			return;
+		}
+
+		delete_post_meta( $post->ID, '_ig_tc_notices' );
+	}
+
+	/**
+	 * This function is called on admin_notices and it displays all notices saved in
+	 * post_meta if current screen is post/page add/edit screen
+	 */
+	public function show_admin_notices() {
+		global $post;
+
+		if( empty( $post ) || ! is_object( $post ) || ! isset( $post->ID ) || intval( $post->ID ) < 1 ) {
+			return;
+		}
+
+		$notices = get_post_meta( $post->ID, '_ig_tc_notices', true );
+
+		if( empty( $notices ) ) {
+			return;
+		}
+
+		foreach( $notices as $notice ) {
+			echo '<div class="' . $notice['type'] . '"><p>' . $notice['message'] . '</p></div>';
+		}
+	}
+
+	/**
+	 * This function queues up addition of meta boxes for the allowed post types
+	 */
 	public function add_meta_box() {
 		if( empty( $this->_post_types ) || ! is_array( $this->_post_types ) ) {
 			return;
@@ -63,6 +125,10 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 		}
 	}
 
+	/**
+	 * This function is called back by add_meta_box() when our meta box is being
+	 * rendered. This function renders the UI for our custom meta box
+	 */
 	public function add_meta_box_ui( $post ) {
 		//add nonce field
 		wp_nonce_field( parent::plugin_id . '-mb-nonce', 'ig_tc_nonce' );
@@ -97,30 +163,30 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 				</td>
 			</tr>
 			<tr class="ig-tc-mb-player-ui">
-				<td><label for="ig_tc_player_url">Player URL <strong>:</strong></label></td>
+				<td><label for="ig_tc_player_url">Player URL <strong>:</strong></label><span class="ig-tc-required">*</span></td>
 				<td>
 					<input name="ig_tc_player_url" id="ig_tc_player_url" class="regular-text" value="<?php echo $mb_options['player_url']; ?>" />
 				</td>
 			</tr>
 			<tr class="ig-tc-mb-player-ui">
-				<td><label for="ig_tc_player_width">Player Width <strong>:</strong></label></td>
+				<td><label for="ig_tc_player_width">Player Width <strong>:</strong></label><span class="ig-tc-required">*</span></td>
 				<td>
 					<input name="ig_tc_player_width" id="ig_tc_player_width" class="regular-text" value="<?php echo $mb_options['player_width']; ?>" />
 					<span class="description">Enter player width in pixels</span>
 				</td>
 			</tr>
 			<tr class="ig-tc-mb-player-ui">
-				<td><label for="ig_tc_player_height">Player Height <strong>:</strong></label></td>
+				<td><label for="ig_tc_player_height">Player Height <strong>:</strong></label><span class="ig-tc-required">*</span></td>
 				<td>
 					<input name="ig_tc_player_height" id="ig_tc_player_height" class="regular-text" value="<?php echo $mb_options['player_height']; ?>" />
 					<span class="description">Enter player height in pixels</span>
 				</td>
 			</tr>
 			<tr class="ig-tc-mb-player-ui">
-				<td><label for="ig_tc_player_image">Player Image URL <strong>:</strong></label></td>
+				<td><label for="ig_tc_player_image">Player Image URL <strong>:</strong></label><span class="ig-tc-required">*</span></td>
 				<td>
 					<input name="ig_tc_player_image" id="ig_tc_player_image" class="regular-text" value="<?php echo $mb_options['player_image']; ?>" />
-					<span class="description">Enter URL of image displayed as placeholder for player</span>
+					<span class="description">Enter placeholder image URL for player</span>
 				</td>
 			</tr>
 		</table>
@@ -132,12 +198,19 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 	 * This function saves input from meta-box on post/page add/edit in wp-admin
 	 */
 	public function save_meta_box( $post_id ) {
+		if( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
+			//its auto save, bail out
+			return $post_id;
+		}
+
+		//if its post revision then get parent ID
 		if( wp_is_post_revision( $post_id ) !== false ) {
 			$post_id = wp_is_post_revision( $post_id );
 		}
 
+		//if post_type var is not set or post_type isn't among the ones we want then bail out
 		if( ! isset( $_POST['post_type'] ) || empty( $_POST['post_type'] ) || ! in_array( $_POST['post_type'], $this->_post_types ) ) {
-			return;
+			return $post_id;
 		}
 
 		check_admin_referer( parent::plugin_id . '-mb-nonce', 'ig_tc_nonce' );
@@ -150,11 +223,31 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 		$data['player_height'] = '';
 		$data['player_image'] = '';
 
+		//if player card selected only then we're interested in values of those fields
 		if( $data['card_type'] == 'player' ) {
 			$data['player_url'] = esc_url_raw( $_POST['ig_tc_player_url'] );
 			$data['player_width'] = floatval( $_POST['ig_tc_player_width'] );
 			$data['player_height'] = floatval( $_POST['ig_tc_player_height'] );
 			$data['player_image'] = esc_url_raw( $_POST['ig_tc_player_image'] );
+
+			//data validation
+			if( empty( $data['player_url'] ) ) {
+				$this->_add_admin_notice( 'Player URL is required', 'error' );
+			}
+			if( empty( $data['player_width'] ) ) {
+				$this->_add_admin_notice( 'Player width is required', 'error' );
+			}
+			if( empty( $data['player_height'] ) ) {
+				$this->_add_admin_notice( 'Player height is required', 'error' );
+			}
+			if( empty( $data['player_image'] ) ) {
+				$this->_add_admin_notice( 'Placeholder image for player is required', 'error' );
+			}
+		}
+
+		//if any of player data is missing then make it summary card
+		if( empty( $data['player_url'] ) || empty( $data['player_width'] ) || empty( $data['player_height'] ) || empty( $data['player_image'] ) ) {
+			$data['card_type'] = 'summary';
 		}
 
 		update_post_meta( $post_id, '_ig_tc_mb', $data );
@@ -219,7 +312,7 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 			<table id="ig-tc-admin-ui" width="85%" border="0">
 				<tr>
 					<td width="28%">
-						<label for="site_twitter_name">Site Twitter Name</label>
+						<label for="site_twitter_name">Site Twitter Name</label> <span class="ig-tc-required">*</span>
 						<div style="display: inline-block; float: right;">@</div>
 					</td>
 					<td width="35%">
@@ -272,6 +365,31 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 			</form>
 		</div>
 <?php
+	}
+
+	/**
+	 * This function accepts a message which is to be displayed after
+	 * current post/page is saved.
+	 */
+	private function _add_admin_notice( $message, $type = 'error' ) {
+		if( empty( $message ) || ! is_string( $message ) ) {
+			return;
+		}
+
+		$key = md5( $message );
+
+		if( array_key_exists( $key, $this->_admin_notices ) ) {
+			return;
+		}
+
+		$type = ( $type !== 'success' ) ? 'error' : 'updated';
+
+		$this->_admin_notices[$key] = array(
+			'type' => $type,
+			'message' => $message
+		);
+
+		return true;
 	}
 
 	/**
@@ -336,12 +454,18 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 
 		$data = wp_parse_args( $data, $this->_default_options );	//weed out any extra vars
 
-		if( empty( $data['home_title'] ) ) {
+		if( empty( $data['site_twitter_name'] ) ) {
+			//set error message
+			$response['msg'] = $this->_create_ajax_message( '<span class="ig-tc-msg-field">Site Twitter Name</span> cannot be empty', 'error' );
+			$response['field'] = 'site_twitter_name';
+		} elseif( empty( $data['home_title'] ) ) {
 			//set error message
 			$response['msg'] = $this->_create_ajax_message( '<span class="ig-tc-msg-field">Title for Home/Archive Page</span> cannot be empty', 'error' );
+			$response['field'] = 'home_title';
 		} elseif( empty( $data['home_desc'] ) ) {
 			//set error message
 			$response['msg'] = $this->_create_ajax_message( '<span class="ig-tc-msg-field">Description for Home/Archive Page</span> cannot be empty', 'error' );
+			$response['field'] = 'home_desc';
 		} else {
 			$response['error'] = 0;	//all ok, we will proceed
 

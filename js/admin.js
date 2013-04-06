@@ -3,7 +3,7 @@
  *
  * @author: Amit Gupta
  * @since: 2013-02-18
- * @version: 2013-04-01
+ * @version: 2013-04-06
  */
 
 
@@ -39,6 +39,12 @@ jQuery(document).ready(function($) {
 					ig_tc.nonce = data.nonce;
 					$.msg( 'replace', data.msg );
 
+					//if field ID is set then set focus on it
+					if( data.field ) {
+						$( '#' + data.field ).focus();
+					}
+
+					//if option values have been sent back then set them up
 					if( data.options ) {
 						$.each( data.options, function( index, value ){
 							$('#'+index).val( value );
