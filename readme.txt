@@ -4,7 +4,7 @@ Tags: twitter, twitter cards, meta, summary card, player card, cards, social, sh
 Requires at least: 3.4
 Tested up to: 3.5.1
 Stable tag: trunk
-License: GPLv2
+License: GPL v2
 
 A plugin to enable Twitter Cards for your WordPress website.
 
@@ -20,7 +20,7 @@ This plugin has been written with WordPress.com VIP compliance in mind, so you c
 
 **Requirements**: This plugin requires PHP 5.3 or better and is supported on WordPress 3.4 or better. It might work on a lower version of PHP or WordPress but no support would be provided for those platforms.
 
-Pull requests on Github are most welcome.
+Pull requests on Github are welcome.
 
 Github: https://github.com/coolamit/ig-twitter-cards
 

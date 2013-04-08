@@ -1,6 +1,6 @@
 # iG:Twitter Cards #
 
-**License: GPLv2**
+**License: GPL v2**
 
 A plugin to enable Twitter Cards for your WordPress website.
 
@@ -17,7 +17,7 @@ This plugin has been written with WordPress.com VIP compliance in mind, so you c
 
 **Requirements**: This plugin requires PHP 5.3 or better and is supported on WordPress 3.4 or better. It might work on a lower version of PHP or WordPress but no support would be provided for those platforms.
 
-Pull requests are most welcome.
+Pull requests are welcome.
 
 ## Installation ##
 
