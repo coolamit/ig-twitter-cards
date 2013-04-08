@@ -19,6 +19,9 @@ This plugin has been written with WordPress.com VIP compliance in mind, so you c
 
 Pull requests are welcome.
 
+WordPress.org plugin page: http://wordpress.org/extend/plugins/ig-twitter-cards/
+WordPress.org plugin repo: http://plugins.svn.wordpress.org/ig-twitter-cards/
+
 ## Installation ##
 
 ###Installing The Plugin###

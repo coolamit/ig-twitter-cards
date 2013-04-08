@@ -24,7 +24,7 @@ Pull requests on Github are welcome.
 
 Github: https://github.com/coolamit/ig-twitter-cards
 
-WordPress.org plugin repo: http://plugins.svn.wordpress.org/igtwitter-cards/
+WordPress.org plugin repo: http://plugins.svn.wordpress.org/ig-twitter-cards/
 
 == Installation ==
 
