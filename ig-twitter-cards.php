@@ -3,11 +3,15 @@
 Plugin Name: iG:Twitter Cards
 Plugin URI: http://blog.igeek.info/wp-plugins/ig-twitter-cards/
 Description: This plugin enables Twitter Cards on a site. Check Twitter Cards documentation for details - https://dev.twitter.com/docs/cards
-Version: 1.0
+Version: 1.1
 Author: Amit Gupta
 Author URI: http://blog.igeek.info/
 License: GPL v2
 */
+
+if( ! defined('IG_TWITTER_CARDS_VERSION') ) {
+	define( 'IG_TWITTER_CARDS_VERSION', 1.1 );
+}
 
 add_action( 'init', 'ig_twitter_cards_loader' );
 

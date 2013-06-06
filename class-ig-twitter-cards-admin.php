@@ -40,7 +40,7 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 		add_action( 'personal_options_update', array( $this, 'save_user_twitter_field' ) );
 		add_action( 'edit_user_profile_update', array( $this, 'save_user_twitter_field' ) );
 
-		if( $this->_get_option('show_on_post_page') == 'yes' ) {
+		if( $this->get_option('show_on_post_page') == 'yes' ) {
 			//add metabox on post pages in admin
 			add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 			//save metabox data on post pages in admin
@@ -142,14 +142,16 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 		$mb_options = wp_parse_args( $mb_options, $this->_default_options_mb );
 ?>
 		<div id="<?php echo parent::plugin_id; ?>-mb-inner">
-		<table width="95%" border="0">
+		<table width="97%" border="0">
+			<?php do_action( 'ig_twitter_cards_post_mb_ui', $post ); ?>
 			<tr>
-				<td width="20%">
-					<label for="ig_tc_author_twitter">Author's Twitter <strong>:</strong></label>
+				<td width="22%">
+					<label for="ig_tc_author_twitter">Author's Twitter Handle <strong>:</strong></label>
 					<div style="display: inline-block; float: right;">@</div>
 				</td>
 				<td>
 					<input name="ig_tc_author_twitter" id="ig_tc_author_twitter" class="regular-text" value="<?php echo $mb_options['author_twitter']; ?>" />
+					<span class="description">Does not override the Site Twitter Handle</span>
 				</td>
 			</tr>
 			<tr>
@@ -163,27 +165,41 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 				</td>
 			</tr>
 			<tr class="ig-tc-mb-player-ui">
-				<td><label for="ig_tc_player_url">Player URL <strong>:</strong></label><span class="ig-tc-required">*</span></td>
+				<td><label for="ig_tc_player_url">Video Source URL <strong>:</strong></label><span class="ig-tc-required">*</span></td>
 				<td>
 					<input name="ig_tc_player_url" id="ig_tc_player_url" class="regular-text" value="<?php echo $mb_options['player_url']; ?>" />
 				</td>
 			</tr>
+
 			<tr class="ig-tc-mb-player-ui">
-				<td><label for="ig_tc_player_width">Player Width <strong>:</strong></label><span class="ig-tc-required">*</span></td>
+				<td><label for="ig_tc_player_aspect_ratio">Video Aspect Ratio <strong>:</strong></label></td>
+				<td>
+					<select id="ig_tc_player_aspect_ratio" name="ig_tc_player_aspect_ratio">
+						<option value="" selected></option>
+						<option value="4:3">4:3</option>
+						<option value="16:9">16:9</option>
+						<option value="16:10">16:10</option>
+					</select>
+					<span class="description">Select aspect ratio of video to auto calculate video width or height</span>
+				</td>
+			</tr>
+
+			<tr class="ig-tc-mb-player-ui">
+				<td><label for="ig_tc_player_width">Video Width <strong>:</strong></label><span class="ig-tc-required">*</span></td>
 				<td>
 					<input name="ig_tc_player_width" id="ig_tc_player_width" class="regular-text" value="<?php echo $mb_options['player_width']; ?>" />
-					<span class="description">Enter player width in pixels</span>
+					<span class="description">Enter video width in pixels</span>
 				</td>
 			</tr>
 			<tr class="ig-tc-mb-player-ui">
-				<td><label for="ig_tc_player_height">Player Height <strong>:</strong></label><span class="ig-tc-required">*</span></td>
+				<td><label for="ig_tc_player_height">Video Height <strong>:</strong></label><span class="ig-tc-required">*</span></td>
 				<td>
 					<input name="ig_tc_player_height" id="ig_tc_player_height" class="regular-text" value="<?php echo $mb_options['player_height']; ?>" />
-					<span class="description">Enter player height in pixels</span>
+					<span class="description">Enter video height in pixels</span>
 				</td>
 			</tr>
 			<tr class="ig-tc-mb-player-ui">
-				<td><label for="ig_tc_player_image">Player Image URL <strong>:</strong></label><span class="ig-tc-required">*</span></td>
+				<td><label for="ig_tc_player_image">Image for Player Card <strong>:</strong></label><span class="ig-tc-required">*</span></td>
 				<td>
 					<input name="ig_tc_player_image" id="ig_tc_player_image" class="regular-text" value="<?php echo $mb_options['player_image']; ?>" />
 					<span class="description">Enter placeholder image URL for player</span>
@@ -244,6 +260,8 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 				$this->_add_admin_notice( 'Placeholder image for player is required', 'error' );
 			}
 		}
+
+		$data = apply_filters( 'ig_twitter_cards_post_mb_data', $data, $_POST, $post_id );
 
 		//if any of player data is missing then make it summary card
 		if( empty( $data['player_url'] ) || empty( $data['player_width'] ) || empty( $data['player_height'] ) || empty( $data['player_image'] ) ) {
@@ -312,18 +330,18 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 			<table id="ig-tc-admin-ui" width="85%" border="0">
 				<tr>
 					<td width="28%">
-						<label for="site_twitter_name">Site Twitter Name</label> <span class="ig-tc-required">*</span>
+						<label for="site_twitter_name">Site Twitter Handle</label> <span class="ig-tc-required">*</span>
 						<div style="display: inline-block; float: right;">@</div>
 					</td>
 					<td width="35%">
-						<input name="site_twitter_name" id="site_twitter_name" class="ig-tc-option regular-text" value="<?php echo $this->_get_option( 'site_twitter_name' ); ?>" />
+						<input name="site_twitter_name" id="site_twitter_name" class="ig-tc-option regular-text" value="<?php echo $this->get_option( 'site_twitter_name' ); ?>" />
 					</td>
 					<td><span class="description">Should be a valid Twitter username</span></td>
 				</tr>
 				<tr>
 					<td><label for="fallback_image_url">Fallback Image URL</label></td>
 					<td>
-						<input name="fallback_image_url" id="fallback_image_url" class="ig-tc-option regular-text" value="<?php echo $this->_get_option( 'fallback_image_url' ); ?>" />
+						<input name="fallback_image_url" id="fallback_image_url" class="ig-tc-option regular-text" value="<?php echo $this->get_option( 'fallback_image_url' ); ?>" />
 					</td>
 					<td>&nbsp</td>
 				</tr>
@@ -331,8 +349,8 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 					<td><label for="show_on_post_page">Allow card customization on post?</label></td>
 					<td>
 						<select name="show_on_post_page" id="show_on_post_page" class="ig-tc-option">
-							<option value="yes" <?php selected( $this->_get_option( 'show_on_post_page' ), 'yes' ) ?>>YES</option>
-							<option value="no" <?php selected( $this->_get_option( 'show_on_post_page' ), 'no' ) ?>>NO</option>
+							<option value="yes" <?php selected( $this->get_option( 'show_on_post_page' ), 'yes' ) ?>>YES</option>
+							<option value="no" <?php selected( $this->get_option( 'show_on_post_page' ), 'no' ) ?>>NO</option>
 						</select>
 					</td>
 					<td>&nbsp</td>
@@ -340,14 +358,14 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 				<tr>
 					<td><label for="home_title">Title for Home/Archive Page</label> <span class="ig-tc-required">*</span></td>
 					<td>
-						<input name="home_title" id="home_title" class="ig-tc-option regular-text" value="<?php echo $this->_get_option( 'home_title' ); ?>" />
+						<input name="home_title" id="home_title" class="ig-tc-option regular-text" value="<?php echo $this->get_option( 'home_title' ); ?>" />
 					</td>
 					<td><span class="description">No HTML in Title</span></td>
 				</tr>
 				<tr>
 					<td><label for="home_desc">Description for Home/Archive Page</label> <span class="ig-tc-required">*</span></td>
 					<td>
-						<textarea name="home_desc" id="home_desc" class="ig-tc-option large-text" rows="5" cols="55"><?php echo $this->_get_option( 'home_desc' ); ?></textarea>
+						<textarea name="home_desc" id="home_desc" class="ig-tc-option large-text" rows="5" cols="55"><?php echo $this->get_option( 'home_desc' ); ?></textarea>
 					</td>
 					<td>&nbsp</td>
 				</tr>
@@ -497,16 +515,16 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 		}
 
 		//load stylesheet
-		wp_enqueue_style( parent::plugin_id . '-admin', plugins_url( 'css/admin.css', __FILE__ ), false );
+		wp_enqueue_style( parent::plugin_id . '-admin', plugins_url( 'css/admin.css', __FILE__ ), false, IG_TWITTER_CARDS_VERSION );
 		//load jQuery::msg stylesheet
-		wp_enqueue_style( parent::plugin_id . '-jquery-msg', plugins_url( 'css/jquery.msg.css', __FILE__ ), false );
+		wp_enqueue_style( parent::plugin_id . '-jquery-msg', plugins_url( 'css/jquery.msg.css', __FILE__ ), false, IG_TWITTER_CARDS_VERSION );
 
 		//load jQuery::center script
-		wp_enqueue_script( parent::plugin_id . '-jquery-center', plugins_url( 'js/jquery.center.min.js', __FILE__ ), array( 'jquery' ) );
+		wp_enqueue_script( parent::plugin_id . '-jquery-center', plugins_url( 'js/jquery.center.min.js', __FILE__ ), array( 'jquery' ), IG_TWITTER_CARDS_VERSION );
 		//load jQuery::msg script
-		wp_enqueue_script( parent::plugin_id . '-jquery-msg', plugins_url( 'js/jquery.msg.min.js', __FILE__ ), array( parent::plugin_id . '-jquery-center' ) );
+		wp_enqueue_script( parent::plugin_id . '-jquery-msg', plugins_url( 'js/jquery.msg.min.js', __FILE__ ), array( parent::plugin_id . '-jquery-center' ), IG_TWITTER_CARDS_VERSION );
 		//load our script
-		wp_enqueue_script( parent::plugin_id . '-admin', plugins_url( 'js/admin.js', __FILE__ ), array( parent::plugin_id . '-jquery-msg' ) );
+		wp_enqueue_script( parent::plugin_id . '-admin', plugins_url( 'js/admin.js', __FILE__ ), array( parent::plugin_id . '-jquery-msg' ), IG_TWITTER_CARDS_VERSION );
 
 		//some vars in JS that we'll need
 		wp_localize_script( parent::plugin_id . '-admin', 'ig_tc', array(

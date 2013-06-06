@@ -123,7 +123,7 @@ abstract class iG_Twitter_Cards {
 	 * This function is a wrapper to fetch an option from $_options class var,
 	 * since direct access to the $_options var is not allowed
 	 */
-	protected function _get_option( $option_name ) {
+	public function get_option( $option_name ) {
 		if( ! empty($option_name) && is_string($option_name) && isset( $this->_options[$option_name] ) ) {
 			return $this->_options[$option_name];
 		}

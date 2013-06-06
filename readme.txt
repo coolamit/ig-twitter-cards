@@ -2,9 +2,9 @@
 Contributors: amit
 Tags: twitter, twitter cards, meta, summary card, player card, cards, social, share, social sharing
 Requires at least: 3.4
-Tested up to: 3.5.1
+Tested up to: 3.6
 Stable tag: trunk
-License: GPL v2
+License: GNU GPL v2
 
 A plugin to enable Twitter Cards for your WordPress website.
 
@@ -62,6 +62,12 @@ Please feel free to suggest a new feature. Its inclusion might be speedier if yo
 2. Metabox on the post/page add/edit screen which allows fine control over each post and page
 
 == ChangeLog ==
+
+= v1.1 =
+
+* Updated labels for admin UI elements
+* Added `ig_twitter_cards_post_mb_ui` & `ig_twitter_cards_post_mb_data` hooks to extend card options UI on post screen in wp-admin
+* Added aspect ratio calculation for video in card options UI on post screen in wp-admin
 
 = v1.0 =
 

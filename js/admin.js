@@ -9,8 +9,21 @@
 
 jQuery(document).ready(function($) {
 
-	function hide_jq_msg() {
-		$.msg( 'unblock' );
+	var ig_tc_admin = {
+		hide_jq_msg: function() {
+			$.msg( 'unblock' );
+		},
+		get_aspect_ratio: function() {
+			var aspect_ratio = $('#ig_tc_player_aspect_ratio').val();
+
+			console.log( 'aspect_ratio = ' + aspect_ratio );
+
+			if( ! aspect_ratio || aspect_ratio === null || aspect_ratio.indexOf( ':' ) <= 0 ) {
+				return false;
+			}
+
+			return aspect_ratio.split( ':' );
+		}
 	}
 
 	var loading_img = $("<img />").attr('src', ig_tc.plugins_url + '/images/ajax-loader.gif');	//pre-load ajax animation, just-in-case
@@ -32,7 +45,7 @@ jQuery(document).ready(function($) {
 				options: $('form#ig-tc-admin-form').serialize()
 			},
 			function(data) {
-				setTimeout( hide_jq_msg, 2000 );
+				setTimeout( ig_tc_admin.hide_jq_msg, 2000 );
 				if( ! data || ! data.nonce || ! data.msg ) {
 					$.msg( 'replace', '<span class="ig-tc-error">Unable to save options</span>' );
 				} else {
@@ -63,7 +76,13 @@ jQuery(document).ready(function($) {
 
 
 	/**
-	 * For the meta-box UI
+	 **********************************
+	 ******** For Metabox UI **********
+	 **********************************
+	 */
+
+	/**
+	 * Show/Hide player card options based on selected card type
 	 */
 	$('#ig_tc_card_type').on( 'change', function(){
 		var card_type = $('#ig_tc_card_type').val();
@@ -74,6 +93,32 @@ jQuery(document).ready(function($) {
 		}
 	} );
 	$('#ig_tc_card_type').trigger( 'change' );
+
+	/**
+	 * Calculate height based specified width and aspect ratio selected
+	 */
+	$('#ig_tc_player_width').on( 'keyup', function(){
+		var aspect_ratio = ig_tc_admin.get_aspect_ratio();
+
+		if( aspect_ratio === false ) {
+			return;
+		}
+
+		$('#ig_tc_player_height').val( parseInt( ( parseInt( aspect_ratio[1] ) * parseInt( $('#ig_tc_player_width').val() ) ) / parseInt( aspect_ratio[0] ) ) );
+	} );
+
+	/**
+	 * Calculate width based specified height and aspect ratio selected
+	 */
+	$('#ig_tc_player_height').on( 'keyup', function(){
+		var aspect_ratio = ig_tc_admin.get_aspect_ratio();
+
+		if( aspect_ratio === false ) {
+			return;
+		}
+
+		$('#ig_tc_player_width').val( parseInt( ( parseInt( aspect_ratio[0] ) * parseInt( $('#ig_tc_player_height').val() ) ) / parseInt( aspect_ratio[1] ) ) );
+	} );
 
 });
 

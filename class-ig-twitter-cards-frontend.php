@@ -151,7 +151,7 @@ class iG_Twitter_Cards_Frontend extends iG_Twitter_Cards {
 
 				unset( $image );
 			} else {
-				$this->_tags['twitter:image'] = esc_url( $this->_get_option( 'fallback_image_url' ) );
+				$this->_tags['twitter:image'] = esc_url( $this->get_option( 'fallback_image_url' ) );
 				if( empty( $this->_tags['twitter:image'] ) ) {
 					unset( $this->_tags['twitter:image'] );
 				}
@@ -159,11 +159,11 @@ class iG_Twitter_Cards_Frontend extends iG_Twitter_Cards {
 		} else {
 			$this->_tags['twitter:url'] = get_home_url();
 
-			$this->_tags['twitter:title'] = $this->_get_option( 'home_title' );
+			$this->_tags['twitter:title'] = $this->get_option( 'home_title' );
 
-			$this->_tags['twitter:description'] = $this->_get_option( 'home_desc' );
+			$this->_tags['twitter:description'] = $this->get_option( 'home_desc' );
 
-			$this->_tags['twitter:image'] = esc_url( $this->_get_option( 'fallback_image_url' ) );
+			$this->_tags['twitter:image'] = esc_url( $this->get_option( 'fallback_image_url' ) );
 			if( empty( $this->_tags['twitter:image'] ) ) {
 				unset( $this->_tags['twitter:image'] );
 			}
@@ -174,7 +174,7 @@ class iG_Twitter_Cards_Frontend extends iG_Twitter_Cards {
 	 * This function adds site's twitter name to tags
 	 */
 	private function _add_site_twitter() {
-		$site_twitter = $this->_get_option( 'site_twitter_name' );
+		$site_twitter = $this->get_option( 'site_twitter_name' );
 		if( empty( $site_twitter ) ) {
 			return;
 		}

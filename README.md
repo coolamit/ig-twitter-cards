@@ -1,6 +1,7 @@
-# iG:Twitter Cards #
+iG:Twitter Cards
+================
 
-**License: GPL v2**
+**License:** [GNU GPL v2](http://www.gnu.org/licenses/gpl-2.0.html)
 
 A plugin to enable Twitter Cards for your WordPress website.
 
@@ -53,6 +54,12 @@ By all means, feel free to submit a pull request.
 Please feel free to suggest a new feature. Its inclusion might be speedier if you can provide the code to make it work.
 
 ## ChangeLog ##
+
+##### v1.1 #####
+
+* Updated labels for admin UI elements
+* Added `ig_twitter_cards_post_mb_ui` & `ig_twitter_cards_post_mb_data` hooks to extend card options UI on post screen in wp-admin
+* Added aspect ratio calculation for video in card options UI on post screen in wp-admin
 
 ##### v1.0 #####
 
