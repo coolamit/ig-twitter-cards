@@ -55,6 +55,10 @@ Please feel free to suggest a new feature. Its inclusion might be speedier if yo
 
 ## ChangeLog ##
 
+##### v1.2 #####
+
+* added data escaping to admin UI elements
+
 ##### v1.1 #####
 
 * Updated labels for admin UI elements

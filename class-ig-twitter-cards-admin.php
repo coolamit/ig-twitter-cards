@@ -101,7 +101,7 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 		}
 
 		foreach( $notices as $notice ) {
-			echo '<div class="' . $notice['type'] . '"><p>' . $notice['message'] . '</p></div>';
+			echo '<div class="' . esc_attr( $notice['type'] ) . '"><p>' . $notice['message'] . '</p></div>';
 		}
 	}
 
@@ -141,7 +141,7 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 		}
 		$mb_options = wp_parse_args( $mb_options, $this->_default_options_mb );
 ?>
-		<div id="<?php echo parent::plugin_id; ?>-mb-inner">
+		<div id="<?php echo esc_attr( parent::plugin_id ); ?>-mb-inner">
 		<table width="97%" border="0">
 			<?php do_action( 'ig_twitter_cards_post_mb_ui', $post ); ?>
 			<tr>
@@ -150,7 +150,7 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 					<div style="display: inline-block; float: right;">@</div>
 				</td>
 				<td>
-					<input name="ig_tc_author_twitter" id="ig_tc_author_twitter" class="regular-text" value="<?php echo $mb_options['author_twitter']; ?>" />
+					<input name="ig_tc_author_twitter" id="ig_tc_author_twitter" class="regular-text" value="<?php echo esc_attr( $mb_options['author_twitter'] ); ?>" />
 					<span class="description">Does not override the Site Twitter Handle</span>
 				</td>
 			</tr>
@@ -167,7 +167,7 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 			<tr class="ig-tc-mb-player-ui">
 				<td><label for="ig_tc_player_url">Video Source URL <strong>:</strong></label><span class="ig-tc-required">*</span></td>
 				<td>
-					<input name="ig_tc_player_url" id="ig_tc_player_url" class="regular-text" value="<?php echo $mb_options['player_url']; ?>" />
+					<input name="ig_tc_player_url" id="ig_tc_player_url" class="regular-text" value="<?php echo esc_attr( $mb_options['player_url'] ); ?>" />
 				</td>
 			</tr>
 
@@ -187,21 +187,21 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 			<tr class="ig-tc-mb-player-ui">
 				<td><label for="ig_tc_player_width">Video Width <strong>:</strong></label><span class="ig-tc-required">*</span></td>
 				<td>
-					<input name="ig_tc_player_width" id="ig_tc_player_width" class="regular-text" value="<?php echo $mb_options['player_width']; ?>" />
+					<input name="ig_tc_player_width" id="ig_tc_player_width" class="regular-text" value="<?php echo esc_attr( $mb_options['player_width'] ); ?>" />
 					<span class="description">Enter video width in pixels</span>
 				</td>
 			</tr>
 			<tr class="ig-tc-mb-player-ui">
 				<td><label for="ig_tc_player_height">Video Height <strong>:</strong></label><span class="ig-tc-required">*</span></td>
 				<td>
-					<input name="ig_tc_player_height" id="ig_tc_player_height" class="regular-text" value="<?php echo $mb_options['player_height']; ?>" />
+					<input name="ig_tc_player_height" id="ig_tc_player_height" class="regular-text" value="<?php echo esc_attr( $mb_options['player_height'] ); ?>" />
 					<span class="description">Enter video height in pixels</span>
 				</td>
 			</tr>
 			<tr class="ig-tc-mb-player-ui">
 				<td><label for="ig_tc_player_image">Image for Player Card <strong>:</strong></label><span class="ig-tc-required">*</span></td>
 				<td>
-					<input name="ig_tc_player_image" id="ig_tc_player_image" class="regular-text" value="<?php echo $mb_options['player_image']; ?>" />
+					<input name="ig_tc_player_image" id="ig_tc_player_image" class="regular-text" value="<?php echo esc_attr( $mb_options['player_image'] ); ?>" />
 					<span class="description">Enter placeholder image URL for player</span>
 				</td>
 			</tr>
@@ -334,14 +334,14 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 						<div style="display: inline-block; float: right;">@</div>
 					</td>
 					<td width="35%">
-						<input name="site_twitter_name" id="site_twitter_name" class="ig-tc-option regular-text" value="<?php echo $this->get_option( 'site_twitter_name' ); ?>" />
+						<input name="site_twitter_name" id="site_twitter_name" class="ig-tc-option regular-text" value="<?php echo esc_attr( $this->get_option( 'site_twitter_name' ) ); ?>" />
 					</td>
 					<td><span class="description">Should be a valid Twitter username</span></td>
 				</tr>
 				<tr>
 					<td><label for="fallback_image_url">Fallback Image URL</label></td>
 					<td>
-						<input name="fallback_image_url" id="fallback_image_url" class="ig-tc-option regular-text" value="<?php echo $this->get_option( 'fallback_image_url' ); ?>" />
+						<input name="fallback_image_url" id="fallback_image_url" class="ig-tc-option regular-text" value="<?php echo esc_attr( $this->get_option( 'fallback_image_url' ) ); ?>" />
 					</td>
 					<td>&nbsp</td>
 				</tr>
@@ -358,16 +358,16 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 				<tr>
 					<td><label for="home_title">Title for Home/Archive Page</label> <span class="ig-tc-required">*</span></td>
 					<td>
-						<input name="home_title" id="home_title" class="ig-tc-option regular-text" value="<?php echo $this->get_option( 'home_title' ); ?>" />
+						<input name="home_title" id="home_title" class="ig-tc-option regular-text" value="<?php echo esc_attr( $this->get_option( 'home_title' ) ); ?>" />
 					</td>
 					<td><span class="description">No HTML in Title</span></td>
 				</tr>
 				<tr>
 					<td><label for="home_desc">Description for Home/Archive Page</label> <span class="ig-tc-required">*</span></td>
 					<td>
-						<textarea name="home_desc" id="home_desc" class="ig-tc-option large-text" rows="5" cols="55"><?php echo $this->get_option( 'home_desc' ); ?></textarea>
+						<textarea name="home_desc" id="home_desc" class="ig-tc-option large-text" rows="5" cols="55"><?php echo esc_textarea( $this->get_option( 'home_desc' ) ); ?></textarea>
 					</td>
-					<td>&nbsp</td>
+					<td><span class="description">No HTML in Description</span></td>
 				</tr>
 				<tr>
 					<td colspan="3">&nbsp;</td>
@@ -467,8 +467,8 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 		$data['site_twitter_name'] = sanitize_title( strtolower( trim( $data['site_twitter_name'] ) ) );
 		$data['fallback_image_url'] = esc_url_raw( $data['fallback_image_url'] );
 		$data['show_on_post_page'] = ( ! $this->_is_yesno( $data['show_on_post_page'] ) ) ? 'no' : strtolower( $data['show_on_post_page'] );
-		$data['home_title'] = wp_kses_post( strip_tags( $data['home_title'] ) );
-		$data['home_desc'] = wp_kses_post( $data['home_desc'] );
+		$data['home_title'] = wp_kses_post( stripslashes( strip_tags( $data['home_title'] ) ) );
+		$data['home_desc'] = wp_kses_post( stripslashes( strip_tags( $data['home_desc'] ) ) );
 
 		$data = wp_parse_args( $data, $this->_default_options );	//weed out any extra vars
 
