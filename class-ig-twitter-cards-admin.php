@@ -170,20 +170,6 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 					<input name="ig_tc_player_url" id="ig_tc_player_url" class="regular-text" value="<?php echo esc_attr( $mb_options['player_url'] ); ?>" />
 				</td>
 			</tr>
-
-			<tr class="ig-tc-mb-player-ui">
-				<td><label for="ig_tc_player_aspect_ratio">Video Aspect Ratio <strong>:</strong></label></td>
-				<td>
-					<select id="ig_tc_player_aspect_ratio" name="ig_tc_player_aspect_ratio">
-						<option value="" selected></option>
-						<option value="4:3">4:3</option>
-						<option value="16:9">16:9</option>
-						<option value="16:10">16:10</option>
-					</select>
-					<span class="description">Select aspect ratio of video to auto calculate video width or height</span>
-				</td>
-			</tr>
-
 			<tr class="ig-tc-mb-player-ui">
 				<td><label for="ig_tc_player_width">Video Width <strong>:</strong></label><span class="ig-tc-required">*</span></td>
 				<td>
@@ -196,6 +182,15 @@ class iG_Twitter_Cards_Admin extends iG_Twitter_Cards {
 				<td>
 					<input name="ig_tc_player_height" id="ig_tc_player_height" class="regular-text" value="<?php echo esc_attr( $mb_options['player_height'] ); ?>" />
 					<span class="description">Enter video height in pixels</span>
+				</td>
+			</tr>
+			<tr class="ig-tc-mb-player-ui">
+				<td>&nbsp;</td>
+				<td>
+					<div id="ig_tc_player_aspect_ratio">
+						<strong>16:9</strong> = &nbsp;<span id="16-9">0</span> px<br />
+						<strong>4:3</strong> = &nbsp;<span id="4-3">0</span> px
+					</div>
 				</td>
 			</tr>
 			<tr class="ig-tc-mb-player-ui">

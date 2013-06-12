@@ -55,6 +55,11 @@ Please feel free to suggest a new feature. Its inclusion might be speedier if yo
 
 ## ChangeLog ##
 
+##### v1.3 #####
+
+* removed video aspect ratio calculation in card options UI on post screen
+* added aspect ratio calculation helper text for video height in card options UI on post screen
+
 ##### v1.2 #####
 
 * added data escaping to admin UI elements

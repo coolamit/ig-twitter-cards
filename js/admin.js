@@ -4,6 +4,8 @@
  * @author: Amit Gupta
  * @since: 2013-02-18
  * @version: 2013-04-06
+ * @version: 2013-06-06
+ * @version: 2013-06-07
  */
 
 
@@ -13,16 +15,27 @@ jQuery(document).ready(function($) {
 		hide_jq_msg: function() {
 			$.msg( 'unblock' );
 		},
-		get_aspect_ratio: function() {
-			var aspect_ratio = $('#ig_tc_player_aspect_ratio').val();
-
-			console.log( 'aspect_ratio = ' + aspect_ratio );
-
-			if( ! aspect_ratio || aspect_ratio === null || aspect_ratio.indexOf( ':' ) <= 0 ) {
-				return false;
+		show_height_per_aspect_ratios: function( value ) {
+			if( typeof value == 'undefined' || value == null ) {
+				return;
 			}
 
-			return aspect_ratio.split( ':' );
+			if( ! value || isNaN( value ) || parseInt( value ) < 0 ) {
+				value = 0;
+			} else {
+				value = parseInt( value );
+			}
+
+			var aspect_ratios = [ '16:9', '4:3' ];
+
+			for( var i = 0; i < aspect_ratios.length; i++ ) {
+				var aspect_ratio = aspect_ratios[i].split( ':' );
+
+				var height = parseInt( ( parseInt( aspect_ratio[1] ) * parseInt( value ) ) / parseInt( aspect_ratio[0] ) );
+
+				var elem_id = aspect_ratio.join('-');
+				$( '#ig_tc_player_aspect_ratio #' + elem_id ).html( height );
+			}
 		}
 	}
 
@@ -95,29 +108,10 @@ jQuery(document).ready(function($) {
 	$('#ig_tc_card_type').trigger( 'change' );
 
 	/**
-	 * Calculate height based specified width and aspect ratio selected
+	 * Calculate and show height based on specified width for all defined aspect ratios
 	 */
 	$('#ig_tc_player_width').on( 'keyup', function(){
-		var aspect_ratio = ig_tc_admin.get_aspect_ratio();
-
-		if( aspect_ratio === false ) {
-			return;
-		}
-
-		$('#ig_tc_player_height').val( parseInt( ( parseInt( aspect_ratio[1] ) * parseInt( $('#ig_tc_player_width').val() ) ) / parseInt( aspect_ratio[0] ) ) );
-	} );
-
-	/**
-	 * Calculate width based specified height and aspect ratio selected
-	 */
-	$('#ig_tc_player_height').on( 'keyup', function(){
-		var aspect_ratio = ig_tc_admin.get_aspect_ratio();
-
-		if( aspect_ratio === false ) {
-			return;
-		}
-
-		$('#ig_tc_player_width').val( parseInt( ( parseInt( aspect_ratio[0] ) * parseInt( $('#ig_tc_player_height').val() ) ) / parseInt( aspect_ratio[1] ) ) );
+		ig_tc_admin.show_height_per_aspect_ratios( $('#ig_tc_player_width').val() );
 	} );
 
 });
